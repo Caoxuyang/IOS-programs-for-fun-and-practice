@@ -27,8 +27,7 @@ class CalcModel{
                 // UnaryOperator
                 case .unaryOperator(let symbol, _):
                     return symbol
-                default:
-                    return "unknown"
+                
                 }
             } }
     }
@@ -43,7 +42,7 @@ class CalcModel{
         supportedOperators["-"] = Operation.binaryOperator("-") {$1 - $0}
         supportedOperators["×"] = Operation.binaryOperator("×", *)
         supportedOperators["÷"] = Operation.binaryOperator("÷") {$1 / $0}
-        //supportedOperators["±"] = Operation.unaryOperator("±", -)
+        supportedOperators["±"] = Operation.unaryOperator("±", -)
         newOperator(Operation.unaryOperator("±", -))
         newOperator(Operation.unaryOperator("COS", cos))
         newOperator(Operation.unaryOperator("SIN", sin))
@@ -96,6 +95,12 @@ class CalcModel{
         print("stack is \(stack) and [Double] is \(result) with \(leftOverStack) left over")
         return result
     }
+    func allClear() -> [Double]{
+        result = []
+        stack = []
+        return result
+    }
+    
     private func evaluateStack(_ changeArray: Bool, _ stack: [Operation]) -> (result: [Double], leftOverStack: [Operation]){
         if !stack.isEmpty {
             var leftOverStack = stack
@@ -112,7 +117,7 @@ class CalcModel{
                 
             case .unaryOperator(_, let operation):
                 let firstEval = evaluateStack(false, leftOverStack)
-                if let firstEvalResult = firstEval.result.first {
+                if let firstEvalResult = firstEval.result.last {
                     if(changeArray){
                         result.removeLast()
                         result.append(operation(firstEvalResult))
@@ -122,21 +127,22 @@ class CalcModel{
                 
             case .binaryOperator(_, let operation):
                 let firstEval = evaluateStack(false, leftOverStack)
-                if let firstEvalResult = firstEval.result.first {
-                    
+                if let firstEvalResult = firstEval.result.last {
+                    if(changeArray){
+                        result.removeLast()
+                    }
+
                     let secondEval = evaluateStack(false, firstEval.leftOverStack)
-                    if let secondEvalResult = secondEval.result.first {
+                    if let secondEvalResult = secondEval.result.last {
                         if(changeArray){
-                            result.removeFirst()
-                            result.removeFirst()
-                            print("first: \(firstEvalResult), second: \(secondEvalResult), result: \(operation(firstEvalResult,secondEvalResult))")
+                            result.removeLast()
+                            //print("first: \(firstEvalResult), second: \(secondEvalResult), result: \(operation(firstEvalResult,secondEvalResult))")
                             result.append(operation(firstEvalResult,secondEvalResult))
                         }
                         return (result,secondEval.leftOverStack)
                         }
                 }
-            default:
-                break
+            
             }
         }
         return ([], stack)

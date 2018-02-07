@@ -29,22 +29,33 @@ class CalcVC: UIViewController {
             if displayValues.count > 4 {
                 for i in 0 ... 3{
                     let tempScreen = stackDisplay.filter { $0.tag == 3 - i }.first!
-                    tempScreen.text = String(displayValues[displayValues.endIndex - 1 - i])
+                    tempScreen.text = String(displayValues[displayValues.endIndex - 3 + i])
                 }
             } else {
                 let length = displayValues.count
                 for i in 0 ... length-1{
                     let tempScreen = stackDisplay.filter { $0.tag == length - 1 - i }.first!
-                    tempScreen.text = String(displayValues[displayValues.endIndex - 1 - i])
+                    tempScreen.text = String(displayValues[displayValues.startIndex + i])
                 }
-                for i in length ... 3{
-                    let tempScreen = stackDisplay.filter { $0.tag == i }.first!
-                    tempScreen.text = " "
+                if length < 4 {
+                    for i in length ... 3{
+                        let tempScreen = stackDisplay.filter { $0.tag == i }.first!
+                        tempScreen.text = " "
+                    }
                 }
             }
         }
     }
     
+    @IBAction func allClear(_ sender: UIButton) {
+        inputMode = true
+        displayValues = calcModel.allClear()
+        calcDisplay.text = "0"
+        for i in 1 ... 3{
+            let tempScreen = stackDisplay.filter { $0.tag == i }.first!
+            tempScreen.text = " "
+        }
+    }
     @IBAction func pushOperand(_ sender: UIButton? = nil) {
 
         inputMode = false
@@ -54,17 +65,19 @@ class CalcVC: UIViewController {
             if displayValues.count > 4 {
                 for i in 0 ... 3{
                     let tempScreen = stackDisplay.filter { $0.tag == 3 - i }.first!
-                    tempScreen.text = String(displayValues[displayValues.endIndex - 1 - i])
+                    tempScreen.text = String(displayValues[displayValues.endIndex - 3 + i])
                 }
             } else {
                 let length = displayValues.count
                 for i in 0 ... length-1{
                     let tempScreen = stackDisplay.filter { $0.tag == length - 1 - i }.first!
-                    tempScreen.text = String(displayValues[displayValues.endIndex - 1 - i])
+                    tempScreen.text = String(displayValues[displayValues.startIndex + i])
                 }
-                for i in length ... 3{
-                    let tempScreen = stackDisplay.filter { $0.tag == i }.first!
-                    tempScreen.text = " "
+                if length < 4 {
+                    for i in length ... 3{
+                        let tempScreen = stackDisplay.filter { $0.tag == i }.first!
+                        tempScreen.text = " "
+                    }
                 }
             }
         }
