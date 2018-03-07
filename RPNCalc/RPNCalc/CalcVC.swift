@@ -29,7 +29,7 @@ class CalcVC: UIViewController {
             if displayValues.count > 4 {
                 for i in 0 ... 3{
                     let tempScreen = stackDisplay.filter { $0.tag == 3 - i }.first!
-                    tempScreen.text = String(displayValues[displayValues.endIndex - 3 + i])
+                    tempScreen.text = String(displayValues[displayValues.endIndex - 4 + i])
                 }
             } else {
                 let length = displayValues.count
@@ -65,7 +65,7 @@ class CalcVC: UIViewController {
             if displayValues.count > 4 {
                 for i in 0 ... 3{
                     let tempScreen = stackDisplay.filter { $0.tag == 3 - i }.first!
-                    tempScreen.text = String(displayValues[displayValues.endIndex - 3 + i])
+                    tempScreen.text = String(displayValues[displayValues.endIndex - 4 + i])
                 }
             } else {
                 let length = displayValues.count
